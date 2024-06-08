@@ -10,34 +10,41 @@ CORS(app, resources={r"/*": {'origins': "*"}})
 CORS(app, resources={r"/*": {"origins": "http://localhost:8080", "allow_headers": "Access-Control-Allow-Origin"}})
 
 
-@app.route('/data/equipment', methods=["GET", "POST"])
-def equipment_endpoint():
+@app.route('/data/client', methods=["GET", "POST"])
+def client_endpoint():
     if request.method == 'GET':
-        return Database.get_equipment_list()
+        return Database.get_client_list()
     elif request.method == 'POST':
         data = json.loads(request.data)
         if data['method'] == 'ADD':
-            Database.add_equipment(data)
+            return Database.add_client(data)
         elif data['method'] == 'EDIT':
-            Database.edit_equipment(data)
+            return Database.edit_client(data)
         elif data['method'] == 'DELETE':
-            Database.delete_equipment(data)
-    return "True"
+            return Database.delete_client(data)
 
-
-@app.route('/data/mol', methods=["GET", "POST", "DELETE"])
-def mol_endpoint():
+@app.route('/data/order', methods=["GET", "POST"])
+def order_endpoint():
     if request.method == 'GET':
-        return Database.get_mol_list()
+        return Database.get_order_list()
     elif request.method == 'POST':
         data = json.loads(request.data)
         if data['method'] == 'ADD':
-            Database.add_mol(data)
+            return Database.add_order(data)
         elif data['method'] == 'EDIT':
-            Database.edit_mol(data)
+            return Database.edit_order(data)
         elif data['method'] == 'DELETE':
-            Database.delete_mol(data)
-    return "True"
+            return Database.delete_order(data)
+
+
+@app.route('/data/employee', methods=["GET"])
+def employee_endpoint():
+    return Database.get_employee_list()
+
+
+@app.route('/data/product', methods=["GET"])
+def product_endpoint():
+    return Database.get_product_list()
 
 
 if __name__ == '__main__':
