@@ -18,83 +18,98 @@ class Database():
         self.database.close()
 
     @staticmethod
-    def add_equipment(data: dict):
+    def add_client(data: dict):
         db = Database()
         db.create_connect()
-        db.send_sql_request(f"INSERT INTO sos_oborudovanie(kod_oborud, invent_nomer, sostoyanie, kod_tipa_ucheta) VALUES({data['kod_oborud']}, {data['invent_nomer']}, '{data['sostoyanie']}', {data['kod_tipa_ucheta']});")
-        print(f"[COMMAND] INSERT INTO sos_oborudovanie(kod_oborud, invent_nomer, sostoyanie, kod_tipa_ucheta) VALUES({data['kod_oborud']}, {data['invent_nomer']}, '{data['sostoyanie']}', {data['kod_tipa_ucheta']});")
+        db.send_sql_request(f"INSERT INTO zhevzh_Klient(Fam_klienta, Name_klienta, Otch_klienta, Nomer_tel) VALUES({data['Fam_klienta']}, {data['Name_klienta']}, {data['Otch_klienta']}, {data['Nomer_tel']});")
+        print(f"[COMMAND] INSERT INTO zhevzh_Klient(Fam_klienta, Name_klienta, Otch_klienta, Nomer_tel) VALUES({data['Fam_klienta']}, {data['Name_klienta']}, {data['Otch_klienta']}, {data['Nomer_tel']});")
         db.close()
 
     @staticmethod
-    def delete_equipment(data: dict):
+    def edit_client(data: dict):
         db = Database()
         db.create_connect()
-        print(data)
-        db.send_sql_request(f"DELETE FROM sos_oborudovanie WHERE kod_oborud = {data['kod_oborud']};")
-        print(f"[COMMAND] DELETE FROM sos_oborudovanie WHERE kod_oborud = {data['kod_oborud']};")
+        db.send_sql_request(f"UPDATE zhevzh_Klient SET Fam_klienta = '{data['Fam_klienta']}', Name_klienta = '{data['Name_klienta']}', Otch_klienta = '{data['Otch_klienta']}', Nomer_tel = '{data['Nomer_tel']}' WHERE Kod_klienta = {data['Kod_klienta']};")
+        print(f"[COMMAND] UPDATE zhevzh_Klient SET Fam_klienta = '{data['Fam_klienta']}', Name_klienta = '{data['Name_klienta']}', Otch_klienta = '{data['Otch_klienta']}', Nomer_tel = '{data['Nomer_tel']}' WHERE Kod_klienta = {data['Kod_klienta']};")
         db.close()
 
     @staticmethod
-    def edit_equipment(data: dict):
+    def delete_client(data: dict):
         db = Database()
         db.create_connect()
-        db.send_sql_request(f"UPDATE sos_oborudovanie SET sostoyanie = '{data['sostoyanie']}', invent_nomer = {data['invent_nomer']} WHERE kod_oborud = {data['kod_oborud']};")
-        print(f"[COMMAND] UPDATE sos_oborudovanie SET sostoyanie = '{data['sostoyanie']}', invent_nomer = {data['invent_nomer']} WHERE kod_oborud = {data['kod_oborud']};")
+        db.send_sql_request(f"DELETE FROM zhevzh_Klient WHERE Kod_klienta = {data['Kod_klienta']}")
+        print(f"[COMMAND] DELETE FROM zhevzh_Klient WHERE Kod_klienta = {data['Kod_klienta']}")
         db.close()
 
     @staticmethod
-    def get_equipment_list():
+    def get_client_list():
         db = Database()
         db.create_connect()
-        data = db.send_sql_request(f"SELECT * FROM sos_oborudovanie")
-        print(f"[COMMAND] SELECT * FROM sos_oborudovanie")
+        data = db.send_sql_request(f"SELECT * FROM ZHEVZH_KLIENT;")
+        print(f"[COMMAND] SELECT * FROM ZHEVZH_KLIENT;")
         db.close()
-        json_data = []
-        for item in data:
-            json_data.append({
-                'kod_oborud': item[0],
-                'invent_nomer': item[1],
-                'sostoyanie': item[2],
-                'kod_tipa_ucheta': item[3]
-            })
-        return json_data
+        return data
 
     @staticmethod
-    def add_mol(data: dict):
+    def get_employee_list():
         db = Database()
         db.create_connect()
-        db.send_sql_request(f"INSERT INTO sos_MOL(kod_MOL, nach_otvetst, kod_sotr) VALUES({data['kod_MOL']}, '{data['nach_otvetst']}', {data['kod_sotr']});")
-        print(f"[COMMAND] INSERT INTO sos_MOL(kod_MOL, nach_otvetst, kod_sotr) VALUES({data['kod_MOL']}, '{data['nach_otvetst']}', {data['kod_sotr']});")
+        data = db.send_sql_request("SELECT * FROM ZHEVZH_SOTR;")
+        print(f"[COMMAND] SELECT * FROM ZHEVZH_SOTR;")
         db.close()
+        return data
 
     @staticmethod
-    def edit_mol(data: dict):
+    def get_product_list():
         db = Database()
         db.create_connect()
-        db.send_sql_request(f"UPDATE sos_MOL SET kod_sotr = '{data['kod_sotr']}', nach_otvetst = '{data['nach_otvetst']}' WHERE kod_MOL = {data['kod_MOL']};")
-        print(f"[COMMAND] UPDATE sos_MOL SET kod_sotr = '{data['kod_sotr']}', nach_otvetst = '{data['nach_otvetst']}' WHERE kod_MOL = {data['kod_MOL']};")
+        data = db.send_sql_request("SELECT * FROM ZHEVZH_TOVAR")
+        print(f"[COMMAND] SELECT * FROM ZHEVZH_TOVAR")
         db.close()
+        return data
 
     @staticmethod
-    def delete_mol(data: dict):
+    def get_order_list():
+        # ДОПИСАТЬ функцию
         db = Database()
         db.create_connect()
-        db.send_sql_request(f"DELETE FROM sos_MOL WHERE kod_MOL = {data['kod_MOL']};")
-        print(f"[COMMAND] DELETE FROM sos_MOL WHERE kod_MOL = {data['kod_MOL']};")
+        data = db.send_sql_request("SELECT FROM ZHEVZH_TOVAR")
+        print(f"[COMMAND] SELECT * FROM ZHEVZH_TOVAR")
         db.close()
+        return data
 
     @staticmethod
-    def get_mol_list():
+    def create_order(data: dict):
         db = Database()
         db.create_connect()
-        data = db.send_sql_request(f"SELECT kod_MOL, nach_otvetst, kod_sotr FROM sos_MOL;")
-        print(f"[COMMAND] SELECT kod_MOL, nach_otvetst, kod_sotr FROM sos_MOL;")
+        data = db.send_sql_request(f"INSERT INTO zhevzh_Zakaz(Kod_klienta, Kod_sotr, Stoimost_zakaza, Data_zakaza, Data_vypolnenya) VALUES({data['Kod_klienta']}, {data['Kod_sotr']}, {data['Stoimost_zakaza']}, '{data['Data_zakaza']}', '{data['Data_vypolnenya']}');")
+        print(f"[COMMAND] INSERT INTO zhevzh_Zakaz(Kod_klienta, Kod_sotr, Stoimost_zakaza, Data_zakaza, Data_vypolnenya) VALUES({data['Kod_klienta']}, {data['Kod_sotr']}, {data['Stoimost_zakaza']}, '{data['Data_zakaza']}', '{data['Data_vypolnenya']}');")
         db.close()
-        json_data = []
-        for item in data:
-            json_data.append({
-                'kod_MOL': item[0],
-                'nach_otvetst': item[1],
-                'kod_sotr': item[2]
-            })
-        return json_data
+        return data
+
+
+if __name__ == '__main__':
+    # print(Database.get_client_list())
+    # print(Database.get_employee_list())
+    # print(Database.get_product_list())
+    # Database.add_client({
+    #     'Fam_klienta': '1',
+    #     'Name_klienta': '2',
+    #     'Otch_klienta': '3',
+    #     'Nomer_tel': '4'
+    # })
+    # Database.delete_client({
+    #     'Kod_klienta': 4,
+    #     'Fam_klienta': '1',
+    #     'Name_klienta': '2',
+    #     'Otch_klienta': '3',
+    #     'Nomer_tel': '4'
+    # })
+    # Database.edit_client({
+    #     'Kod_klienta': 5,
+    #     'Fam_klienta': '12',
+    #     'Name_klienta': '23',
+    #     'Otch_klienta': '34',
+    #     'Nomer_tel': '45'
+    # })
+    pass
