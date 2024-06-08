@@ -1,0 +1,30 @@
+{
+  "name": "vuetify-project",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@jamescoyle/vue-icon": "^0.1.2",
+    "@mdi/font": "7.0.96",
+    "@mdi/js": "^7.4.47",
+    "@syncfusion/ej2-vue-dropdowns": "^25.1.39",
+    "axios": "^1.7.2",
+    "roboto-fontface": "*",
+    "tippy.js": "^6.3.7",
+    "vue": "^3.2.0",
+    "vue-router": "^4.0.13",
+    "vue-tippy": "^6.4.1",
+    "vuetify": "^3.0.0",
+    "vuex": "^4.1.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.0.0",
+    "sass": "^1.74.1",
+    "unplugin-fonts": "^1.0.3",
+    "vite": "^4.2.0",
+    "vite-plugin-vuetify": "^1.0.0"
+  }
+}
