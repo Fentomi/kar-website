@@ -1,0 +1,103 @@
+CREATE TABLE zhevzh_Ed_Izm( 
+	Kod_ed_izm           integer  NOT NULL PRIMARY KEY,
+	Naimenovanye_ed_izm  varchar(20)  NOT NULL, 
+	Kod_OKEI             integer  NOT NULL 
+);
+
+CREATE TABLE zhevzh_Status_Zakaza( 
+	Kod_statusa          integer  NOT NULL PRIMARY KEY,
+	Naimenovanye_stat    varchar(20)  NULL 
+);
+
+CREATE TABLE zhevzh_Vid_tovara( 
+	Kod_vida_tovara      integer  NOT NULL PRIMARY KEY,
+	Naimenovanye_tovara  varchar(40)  NOT NULL 
+);
+
+CREATE TABLE zhevzh_Dolg( 
+	Kod_dolg             integer  NOT NULL PRIMARY KEY,
+	Naimenovanye_dolg    varchar(40)  NOT NULL
+);
+
+CREATE TABLE zhevzh_Klient( 
+	Kod_klienta          integer  NOT NULL PRIMARY KEY AUTOINCREMENT,
+	Fam_klienta          varchar(20)  NOT NULL ,
+	Name_klienta         varchar(20)  NOT NULL ,
+	Otch_klienta         varchar(20)  NULL ,
+	Nomer_tel            varchar(20)  NOT NULL 
+);
+
+CREATE TABLE zhevzh_Poziciya_Prais_Lista( 
+	Kod_pozicii_PL       integer  NOT NULL PRIMARY KEY,
+	Kod_tovara           integer  NOT NULL ,
+	Kod_PL               integer  NOT NULL ,
+	Price                integer  NOT NULL ,
+	FOREIGN KEY (Kod_tovara) REFERENCES zhevzh_Tovar(Kod_tovara) ,
+	FOREIGN KEY (Kod_PL) REFERENCES zhevzh_Prais_List(Kod_PL)
+);
+		
+CREATE TABLE zhevzh_Poziciya_Zakaza( 
+	Kod_pozicii_zakaza   integer  NOT NULL PRIMARY KEY,
+	Komment_k_pozicii    varchar(100)  NOT NULL ,
+	Kod_pozicii_PL       integer  NOT NULL ,
+	Kod_zakaza           integer  NOT NULL ,
+	Kolvo                integer  NOT NULL ,
+	Itogo_po_pozicii     integer  NOT NULL ,
+	FOREIGN KEY (Kod_pozicii_PL) REFERENCES zhevzh_Poziciya_Prais_Lista(Kod_pozicii_PL),
+	FOREIGN KEY (Kod_zakaza) REFERENCES zhevzh_Zakaz(Kod_zakaza)
+);
+		
+CREATE TABLE zhevzh_Prais_List( 
+	Kod_PL               integer  NOT NULL PRIMARY KEY,
+	Naimenovanye_PL      varchar(40)  NOT NULL ,
+	Kod_sotr             integer  NOT NULL ,
+	Data_sozd            datetime  NOT NULL ,
+	Data_zakr            datetime  NULL ,
+	FOREIGN KEY (Kod_sotr) REFERENCES zhevzh_Sotr(Kod_sotr)
+);
+
+CREATE TABLE zhevzh_Sotr( 
+	Kod_sotr             integer  NOT NULL PRIMARY KEY,
+	Fam_sotr             varchar(20)  NOT NULL ,
+	Name_sotr            varchar(20)  NOT NULL ,
+	Otch_sotr            varchar(20)  NULL ,
+	Pochta_sotr          varchar(20)  NOT NULL ,
+	Kod_dolg             integer  NOT NULL ,
+	Data_priema          datetime  NOT NULL ,
+	Data_yvol            datetime  NULL ,
+	FOREIGN KEY (Kod_dolg) REFERENCES zhevzh_Dolg(Kod_dolg)
+);
+
+CREATE TABLE zhevzh_Tovar( 
+	Kod_tovara           integer  NOT NULL PRIMARY KEY,
+	Naimenovanye_tovara  varchar(40)  NOT NULL ,
+	Opisanye             varchar(100)  NOT NULL ,
+	Kod_vida_tovara      integer  NOT NULL ,
+	kod_ed_izm           integer  NOT NULL ,
+	FOREIGN KEY (Kod_vida_tovara) REFERENCES zhevzh_Vid_tovara(Kod_vida_tovara),
+	FOREIGN KEY (kod_ed_izm) REFERENCES zhevzh_Ed_Izm(kod_ed_izm)
+);
+
+CREATE TABLE zhevzh_Zakaz( 
+	Kod_zakaza           integer  NOT NULL PRIMARY KEY AUTOINCREMENT,
+	Kod_klienta          integer  NOT NULL,
+	Kod_sotr	integer  NOT NULL,
+	Stoimost_zakaza      integer  NOT NULL,
+	Data_zakaza          datetime  NOT NULL,
+	Data_vypolnenya      datetime  NULL,
+	Nomer_zakaza         integer  NULL,
+	FOREIGN KEY (Kod_klienta) REFERENCES zhevzh_Klient(Kod_klienta),
+	FOREIGN KEY (Kod_sotr) REFERENCES zhevzh_Sotr(Kod_sotr)
+);
+
+CREATE TABLE zhevzh_Zakaz_Status( 
+	Kod_zakaza_statusa   integer  NOT NULL PRIMARY KEY,
+	Kod_sotr             integer  NOT NULL ,
+	Kod_zakaza           integer  NOT NULL ,
+	Kod_statusa          integer  NOT NULL ,
+	Data_statusa         datetime  NOT NULL ,
+	Kommentariy          varchar(20)  NULL ,
+	FOREIGN KEY (Kod_statusa) REFERENCES zhevzh_Status_Zakaza(Kod_statusa),
+	FOREIGN KEY (Kod_zakaza) REFERENCES zhevzh_Zakaz(Kod_zakaza),
+	FOREIGN KEY (Kod_sotr) REFERENCES zhevzh_Sotr(Kod_sotr)
+);
