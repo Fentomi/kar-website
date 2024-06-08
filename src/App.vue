@@ -2,7 +2,7 @@
   <Authorization
     v-if="!userIsAuthorized"
     :user-is-authorized="userIsAuthorized"
-    @updateUserIsAuthorized="userIsAuthorized=true"
+    @updateUserIsAuthorized="onUpdateUserIsAuthorized"
   />
   <Main
     v-if="userIsAuthorized"
@@ -23,16 +23,19 @@ export default {
   data() {
     return {
       userIsAuthorized: false,
+      currentRole: 0
+    }
+  },
+  methods: {
+    onUpdateUserIsAuthorized(data) {
+      this.userIsAuthorized = data['isCurrentUser'];
+      this.currentRole = data['currentRole'];
     }
   }
 }
 </script>
 
 <style>
-.wrapper {
-  margin: 30vh auto;
-  width: 700px;
-}
 .v-table__wrapper {
   overflow-x: hidden !important;
 }

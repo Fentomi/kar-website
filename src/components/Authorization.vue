@@ -1,21 +1,25 @@
 <template>
+  <div class="header">
+    <p class="header-text">CA<span style="color: palevioletred;">KE</span></p>
+  </div>
   <div class="wrapper">
-    <h1 class="mb-3">Авторизация</h1>
+    <h1 class="mb-3">Сначала авторизуйтесь!</h1>
+    <p class="mb-2" style="font-weight: bold;">Логин: *</p>
     <v-text-field
+      class="mb-3"
       v-model="userLogin"
-      label="Login"
+      label="example@gmail.com"
     />
+    <p class="mb-2" style="font-weight: bold;">Пароль: *</p>
     <v-text-field
+      class="mb-3"
       v-model="userPassword"
-      label="Password"
+      label="****"
     />
-    <div v-if="showErrorMessage" class="mb-4">
-      Неверный логин или пароль. <br> 
-      Пожалуйста, попробуйте еще раз.
-    </div>
-    <v-btn class="btn" type="submit" block @click="onAuthorizationAttempt"> 
-      Авторизоваться 
-    </v-btn>
+    <div v-if="showErrorMessage" class="mb-3">Неверный логин или пароль, повторите попытку еще раз</div>
+    <v-btn width="120" class="btn" type="submit" @click="onAuthorizationAttempt"> 
+      Войти 
+    </v-btn> 
   </div>
 </template>
 
@@ -35,13 +39,54 @@ export default {
   methods: {
     onAuthorizationAttempt() {
       let isCurrentUser = false;
-      const testData = {
-        login: 'admin',
+      let currentRole = 0;
+      const menedger = {
+        login: 'menedger',
         password: '1111',
+        role: 1
       }
-      if(this.userLogin === testData.login && this.userPassword === testData.password) isCurrentUser = true;
-      return isCurrentUser ? this.$emit('updateUserIsAuthorized', isCurrentUser) : this.showErrorMessage = true;
+      const conditer = {
+        login: 'shef',
+        password: '1111',
+        role: 2
+      }
+      if(this.userLogin === menedger.login && this.userPassword === menedger.password) {
+        isCurrentUser = true;
+        currentRole = menedger.role;
+      }
+      if(this.userLogin === conditer.login && this.userPassword === conditer.password) {
+        isCurrentUser = true;
+        currentRole = conditer.role;
+      }
+      this.userLogin = '';
+      this.userPassword = '';
+      return isCurrentUser ? this.$emit('updateUserIsAuthorized', {isCurrentUser: isCurrentUser, currentRole: currentRole}) : this.showErrorMessage = true;
     }
   },
 }
 </script>
+
+<style scoped lang="scss">
+.header {
+  .header-text {
+    margin-left: 120px;
+    font-size: 52px;
+    font-weight: bold;
+  }
+}
+.wrapper {
+  margin: 0 auto;
+  width: 500px;
+  h1 {
+    display: block;
+    text-align: center;
+  }
+  .btn {
+    display: block;
+    margin: 0 auto;
+    border-radius: 50px;
+    background-color: blueviolet;
+    color: white;
+  }
+}
+</style>
