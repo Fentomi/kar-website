@@ -50,6 +50,7 @@ export default {
         Nomer_tel: this.clientNumber,
       });
       this.clearData();
+      this.$emit('needUpdateClientData');
     },
     clearData() {
       this.clientFirstname = '';

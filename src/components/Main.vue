@@ -21,32 +21,42 @@
 			class="btn mb-4"
 			@click="onAddClient"
 		/>
-		<add-client-form/>
 		<v-btn 
 			text="Список заказчиков" 
 			class="btn"
-			@click="onOpenClientList"
+			@click="isOpenClientList=!isOpenClientList"
 		/>
 	</div>
 	<div v-if="tabs === 'заказы' && currentRole === roleEnum.menedger" class="wrapper">
 		<v-btn text="Оформить заказ" class="btn mb-4"/>
 		<v-btn text="Список заказов" class="btn"/>
 	</div>
+	<add-client-form
+		@needUpdateClientData="updateClientData"
+	/>
+	<div v-if="tabs === 'заказчики'" style="width: 800px; margin: 0 auto;" class="mt-5">
+		<client-list
+			ref="clientList" 
+			:isOpenClientList="isOpenClientList"
+		/>
+	</div>
 </template>
   
 <script>
-import AddClientForm from '@/components/widgets/AddClientForm.vue'
+import AddClientForm from '@/components/widgets/AddClientForm.vue';
+import ClientList from '@/components/widgets/ClientList.vue'
 
 export default {
 	components: {
-		AddClientForm
+		AddClientForm, ClientList
 	},
   data: () => ({
     tabs: null,
 		roleEnum: {
 			menedger: 1,
 			shef: 2
-		}
+		},
+		isOpenClientList: false,
   }),
 	props: {
 		currentRole: Number,
@@ -65,7 +75,9 @@ export default {
 		}
 	},
 	methods: {
-
+		async updateClientData() {
+			return await this.$refs['clientList'].getClientList();
+		}
 	},
 }
 </script>
