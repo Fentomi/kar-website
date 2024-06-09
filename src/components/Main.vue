@@ -5,7 +5,7 @@
 			v-model="tabs"
 			align-tabs="title"
   	>
-			<v-tab text="Заказчики" value="заказчики"></v-tab>
+			<v-tab v-if="currentRole === roleEnum.menedger" text="Заказчики" value="заказчики"></v-tab>
 			<v-tab text="Заказы" value="заказы"></v-tab>
 			<v-tab text="Печать отчета" value="печать отчета"></v-tab>
 			<v-tab value="выход">
@@ -19,7 +19,25 @@
 			text="Добавить заказчика"
 			id="target" 
 			class="btn mb-4"
-			@click="onAddClient"
+		/>
+		<add-client-form
+			@needUpdateClientData="updateClientData"
+		/>
+		<v-btn 
+			text="Редактировать заказчика"
+			id="target2" 
+			class="btn mb-4"
+		/>
+		<edit-client-form
+			@needUpdateClientData="updateClientData"
+		/>
+		<v-btn 
+			text="Удалить заказчика"
+			id="target3" 
+			class="btn mb-4"
+		/>
+		<delete-client-form
+			@needUpdateClientData="updateClientData"
 		/>
 		<v-btn 
 			text="Список заказчиков" 
@@ -28,12 +46,17 @@
 		/>
 	</div>
 	<div v-if="tabs === 'заказы' && currentRole === roleEnum.menedger" class="wrapper">
-		<v-btn text="Оформить заказ" class="btn mb-4"/>
-		<v-btn text="Список заказов" class="btn"/>
+		<v-btn 
+			text="Оформить заказ" 
+			class="btn mb-4"
+			@click=""
+		/>
+		<v-btn 
+			text="Список заказов" 
+			class="btn"
+			@click=""
+		/>
 	</div>
-	<add-client-form
-		@needUpdateClientData="updateClientData"
-	/>
 	<div v-if="tabs === 'заказчики'" style="width: 800px; margin: 0 auto;" class="mt-5">
 		<client-list
 			ref="clientList" 
@@ -44,11 +67,13 @@
   
 <script>
 import AddClientForm from '@/components/widgets/AddClientForm.vue';
-import ClientList from '@/components/widgets/ClientList.vue'
+import DeleteClientForm from '@/components/widgets/DeleteClientForm.vue';
+import EditClientForm from '@/components/widgets/EditClientForm.vue';
+import ClientList from '@/components/widgets/ClientList.vue';
 
 export default {
 	components: {
-		AddClientForm, ClientList
+		AddClientForm, EditClientForm, DeleteClientForm, ClientList
 	},
   data: () => ({
     tabs: null,

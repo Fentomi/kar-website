@@ -23,7 +23,7 @@ export default {
   computed: {
     headers() {
       return [
-        { title: 'Номер заказа', align: 'start', key: 'Kod_klienta'},
+        { title: 'id заказчика', align: 'start', key: 'Kod_klienta'},
         { title: 'Имя заказчика', align: 'start', key: 'Name_klienta'},
         { title: 'Фамилия заказчика', align: 'start', key: 'Fam_klienta'},
         { title: 'Отчество заказчика', align: 'start', key: 'Otch_klienta'},
@@ -36,7 +36,13 @@ export default {
       await axios.get('http://127.0.0.1:5000/data/client').then(response => {
         this.items = response.data;
       });
-    }
+    },
+    async deleteClient() {
+
+    },
+    async editClient() {
+
+    },
   },
   async created() {
     this.getClientList();
