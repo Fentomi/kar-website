@@ -23,8 +23,8 @@ export default {
   },
   data() {
     return {
-      userIsAuthorized: true,
-      currentRole: 1
+      userIsAuthorized: false,
+      currentRole: null
     }
   },
   methods: {

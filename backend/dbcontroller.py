@@ -6,6 +6,8 @@ class Database():
         try:
             self.database = sqlite3.connect('./data/database.db')
             self.cursor = self.database.cursor()
+            self.kod_zakaza_statusa = 1000
+            self.kod_zakaza = 1000
         except:
             print('[DATABASE] Connection lost!')
 
@@ -94,37 +96,63 @@ class Database():
 
     @staticmethod
     def get_order_list():
-        # ДОПИСАТЬ функцию
         db = Database()
         db.create_connect()
-        data = db.send_sql_request("SELECT FROM ZHEVZH_TOVAR")
-        print(f"[COMMAND] SELECT * FROM ZHEVZH_TOVAR")
+        data = db.send_sql_request("""SELECT zhevzh_Zakaz.Kod_zakaza,
+                                      zhevzh_Klient.Fam_klienta || ' ' || zhevzh_Klient.Name_klienta || ' ' || zhevzh_Klient.Otch_klienta AS ФИО_заказчика,
+                                      zhevzh_Zakaz.Data_zakaza,
+                                      zhevzh_Status_Zakaza.Naimenovanye_stat
+                                      FROM zhevzh_Zakaz 
+                                      JOIN zhevzh_Klient ON zhevzh_Zakaz.Kod_klienta = zhevzh_Klient.Kod_klienta
+                                      JOIN zhevzh_Zakaz_Status ON zhevzh_Zakaz.Kod_zakaza = zhevzh_Zakaz_Status.Kod_zakaza
+                                      JOIN zhevzh_Status_Zakaza ON zhevzh_Zakaz_Status.Kod_statusa = zhevzh_Status_Zakaza.Kod_statusa;""")
+        print("""SELECT zhevzh_Zakaz.Kod_zakaza,
+                                      zhevzh_Klient.Fam_klienta || ' ' || zhevzh_Klient.Name_klienta || ' ' || zhevzh_Klient.Otch_klienta AS ФИО_заказчика,
+                                      zhevzh_Zakaz.Data_zakaza,
+                                      zhevzh_Status_Zakaza.Naimenovanye_stat
+                                      FROM zhevzh_Zakaz 
+                                      JOIN zhevzh_Klient ON zhevzh_Zakaz.Kod_klienta = zhevzh_Klient.Kod_klienta
+                                      JOIN zhevzh_Zakaz_Status ON zhevzh_Zakaz.Kod_zakaza = zhevzh_Zakaz_Status.Kod_zakaza
+                                      JOIN zhevzh_Status_Zakaza ON zhevzh_Zakaz_Status.Kod_statusa = zhevzh_Status_Zakaza.Kod_statusa;""")
         db.close()
-        return data
+        result_data = []
+        for item in data:
+            result_data.append({
+                'Kod_zakaza': item[0],
+                'FIO_zakaza': item[1],
+                'Data_zakaza': item[2],
+                'Naimenovanye_stat': item[3]
+            })
+        return result_data
 
     @staticmethod
     def add_order(data: dict):
-        # ПРОТЕСТИРОВАТЬ функцию
         db = Database()
         db.create_connect()
-        db.send_sql_request(f"INSERT INTO zhevzh_Zakaz(Kod_klienta, Kod_sotr, Stoimost_zakaza, Data_zakaza, Data_vypolnenya) VALUES({data['Kod_klienta']}, {data['Kod_sotr']}, {data['Stoimost_zakaza']}, '{data['Data_zakaza']}', '{data['Data_vypolnenya']}');")
-        print(f"[COMMAND] INSERT INTO zhevzh_Zakaz(Kod_klienta, Kod_sotr, Stoimost_zakaza, Data_zakaza, Data_vypolnenya) VALUES({data['Kod_klienta']}, {data['Kod_sotr']}, {data['Stoimost_zakaza']}, '{data['Data_zakaza']}', '{data['Data_vypolnenya']}');")
+        db.send_sql_request(f"INSERT INTO zhevzh_Zakaz (Kod_zakaza, Kod_klienta, Kod_sotr, Stoimost_zakaza, Data_zakaza) VALUES ({data['Kod_zakaza']}, {data['Kod_klienta']}, {data['Kod_sotr']}, '{data['Stoimost_zakaza']}', '{data['Data_zakaza']}');")
+        print(f"[COMMAND] INSERT INTO zhevzh_Zakaz (Kod_klienta, Kod_sotr, Stoimost_zakaza, Data_zakaza) VALUES ({data['Kod_klienta']}, {data['Kod_sotr']}, '{data['Stoimost_zakaza']}', '{data['Data_zakaza']}');")
+        db.send_sql_request(f"INSERT INTO zhevzh_Zakaz_Status(Kod_zakaza_statusa, Kod_sotr, Kod_zakaza, Kod_statusa, Data_statusa) VALUES({data['Kod_zakaza_statusa']}, {data['Kod_sotr']}, {data['Kod_zakaza']}, (SELECT Kod_statusa FROM zhevzh_Status_Zakaza WHERE Naimenovanye_stat = 'Оформлен'), '{data['Data_zakaza']}');")
+        print(f"INSERT INTO zhevzh_Zakaz_Status(Kod_zakaza_statusa, Kod_sotr, Kod_zakaza, Kod_statusa, Data_statusa) VALUES({data['Kod_zakaza_statusa']}, {data['Kod_sotr']}, {data['Kod_zakaza']}, (SELECT Kod_statusa FROM zhevzh_Status_Zakaza WHERE Naimenovanye_stat = 'Оформлен'), '{data['Data_zakaza']}');")
         db.close()
         return 'ok'
 
     @staticmethod
     def edit_order(data: dict):
-        # ПРОТЕСТИРОВАТЬ функцию
         db = Database()
         db.create_connect()
-        db.send_sql_request(f"UPDATE zhevzh_Zakaz SET Fam_klienta = '{data['Fam_klienta']}', Name_klienta = '{data['Name_klienta']}', Otch_klienta = '{data['Otch_klienta']}', Nomer_tel = '{data['Nomer_tel']}' WHERE Kod_klienta = {data['Kod_klienta']};")
-        print(f"[COMMAND] ")
+        db.send_sql_request(f"""UPDATE zhevzh_Zakaz_Status
+                                SET Kod_statusa = (SELECT Kod_statusa FROM zhevzh_Status_Zakaza WHERE Naimenovanye_stat = '{data['Naimenovanye_stat']}'),
+                                    Data_statusa = CURRENT_TIMESTAMP
+                                WHERE Kod_zakaza = {data['Kod_zakaza']};""")
+        print(f"""[COMMAND] UPDATE zhevzh_Zakaz_Status
+                                SET Kod_statusa = (SELECT Kod_statusa FROM zhevzh_Status_Zakaza WHERE Naimenovanye_stat = '{data['Naimenovanye_stat']}'),
+                                    Data_statusa = CURRENT_TIMESTAMP
+                                WHERE Kod_zakaza = {data['Kod_zakaza']};""")
         db.close()
         return 'ok'
 
     @staticmethod
     def delete_order(data: dict):
-        # ПРОТЕСТИРОВАТЬ функцию
         db = Database()
         db.create_connect()
         db.send_sql_request(f"DELETE FROM zhevzh_Zakaz WHERE Kod_zakaza = {data['Kod_zakaza']}")
@@ -134,27 +162,12 @@ class Database():
 
 
 if __name__ == '__main__':
-    # print(Database.get_client_list())
-    print(Database.get_employee_list())
-    # print(Database.get_product_list())
-    # Database.add_client({
-    #     'Fam_klienta': '1',
-    #     'Name_klienta': '2',
-    #     'Otch_klienta': '3',
-    #     'Nomer_tel': '4'
-    # })
-    # Database.delete_client({
-    #     'Kod_klienta': 4,
-    #     'Fam_klienta': '1',
-    #     'Name_klienta': '2',
-    #     'Otch_klienta': '3',
-    #     'Nomer_tel': '4'
-    # })
-    # Database.edit_client({
-    #     'Kod_klienta': 5,
-    #     'Fam_klienta': '12',
-    #     'Name_klienta': '23',
-    #     'Otch_klienta': '34',
-    #     'Nomer_tel': '45'
+    # Database.add_order({
+    #     'Kod_zakaza': 900,
+    #     'Kod_zakaza_statusa': 900,
+    #     'Kod_klienta': 1,
+    #     'Kod_sotr': 2,
+    #     'Stoimost_zakaza': 0,
+    #     'Data_zakaza': '2023-07-01',
     # })
     pass

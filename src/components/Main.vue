@@ -51,16 +51,53 @@
 			text="Оформить заказ" 
 			class="btn mb-4"
 		/>
-		<add-order/>
+		<add-order
+      @needUpdateOrderData="updateOrderData"
+		/>
+		<v-btn 
+			id="target5"
+			text="Редактировать заказ" 
+			class="btn mb-4"
+		/>
+		<edit-order
+      :current-role="currentRole"
+      @needUpdateOrderData="updateOrderData"
+    />
+		<v-btn 
+			id="target6"
+			text="Удалить заказ" 
+			class="btn mb-4"
+		/>
+		<delete-order
+      @needUpdateOrderData="updateOrderData"
+    />
 		<v-btn 
 			text="Список заказов" 
 			class="btn"
+      @click="isOpenOrderList=!isOpenOrderList"
 		/>
 	</div>
+  <div v-if="tabs === 'заказы' && currentRole === roleEnum.shef" class="wrapper">
+    <v-btn 
+			id="target5"
+			text="Редактировать заказ" 
+			class="btn mb-4"
+		/>
+		<edit-order
+      :current-role="currentRole"
+      @needUpdateOrderData="updateOrderData"
+    />
+  </div>
 	<div v-if="tabs === 'заказчики'" style="width: 800px; margin: 0 auto;" class="mt-5">
 		<client-list
 			ref="clientList" 
 			:isOpenClientList="isOpenClientList"
+		/>
+	</div>
+  <div v-if="tabs === 'заказы'" style="width: 800px; margin: 0 auto;" class="mt-5">
+		<orders-list
+			ref="orderList" 
+			:isOpenOrderList="isOpenOrderList"
 		/>
 	</div>
 </template>
@@ -71,10 +108,13 @@ import DeleteClientForm from '@/components/widgets/DeleteClientForm.vue';
 import EditClientForm from '@/components/widgets/EditClientForm.vue';
 import ClientList from '@/components/widgets/ClientList.vue';
 import AddOrder from '@/components/widgets/AddOrder.vue';
+import EditOrder from '@/components/widgets/EditOrder.vue';
+import DeleteOrder from '@/components/widgets/DeleteOrder.vue';
+import OrdersList from './widgets/OrdersList.vue';
 
 export default {
 	components: {
-		AddClientForm, EditClientForm, DeleteClientForm, ClientList, AddOrder
+		AddClientForm, EditClientForm, DeleteClientForm, ClientList, AddOrder, EditOrder, DeleteOrder, OrdersList
 	},
   data: () => ({
     tabs: null,
@@ -83,6 +123,7 @@ export default {
 			shef: 2
 		},
 		isOpenClientList: false,
+    isOpenOrderList: true,
   }),
 	props: {
 		currentRole: Number,
@@ -103,7 +144,10 @@ export default {
 	methods: {
 		async updateClientData() {
 			return await this.$refs['clientList'].getClientList();
-		}
+		},
+    async updateOrderData() {
+      return await this.$refs['orderList'].getOrderList();
+    },
 	},
 }
 </script>

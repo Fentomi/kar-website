@@ -57,27 +57,36 @@ export default {
   data() {
     return {
       selectedEmployee: null,
+      orderDate: null,
+      preOrderDate: null,
       selectedClient: null,
       selectedProducts: [{productName: '', productCount: null}],
       employees: [],
       clients: [],
-      products: ['Торт "Наполеон"', 'Пирожное "Тирамиссу"']
+      products: ['Торт "Наполеон"', 'Пирожное "Тирамиссу"'],
+      Kod_pozicii_zakaza: 1001,
+      orderCode: 1001,
+      Kod_zakaza_statusa: 1001,
     }
   },
   methods: {
     async saveOrder() {
       const employeeCode = this.employees.find(item => 
-        item.Name_sotr === this.selectedEmployee.split(' ')[0] && item.Fam_sotr === this.selectedEmployee.split(' ')[1]).Kod_sotr;
+        item.Fam_sotr === this.selectedEmployee.split(' ')[0] && item.Name_sotr === this.selectedEmployee.split(' ')[1]).Kod_sotr;
       const clientCode = this.clients.find(item => 
-        item.Name_klienta === this.selectedClient.split(' ')[0] && item.Fam_klienta === this.selectedClient.split(' ')[1]).Kod_klienta;
+        item.Fam_klienta === this.selectedClient.split(' ')[0] && item.Name_klienta === this.selectedClient.split(' ')[1]).Kod_klienta;
       await axios.post('http://127.0.0.1:5000/data/order', {
         method: 'ADD',
+        Kod_zakaza_statusa: this.Kod_zakaza_statusa,
+        Kod_zakaza: this.orderCode,
         Kod_klienta: clientCode,
         Kod_sotr: employeeCode,
         Stoimost_zakaza: this.orderPrice,
         Data_zakaza: this.orderDate,
-        Data_vypolnenya: this.plannedOrderDate
-      })
+      });
+      this.orderCode+=1;
+      this.Kod_zakaza_statusa+=1;
+      this.$emit('needUpdateOrderData');
     },
     async getEmployees() {
       await axios.get('http://127.0.0.1:5000/data/employee').then(response => {
