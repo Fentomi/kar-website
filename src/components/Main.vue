@@ -47,14 +47,14 @@
 	</div>
 	<div v-if="tabs === 'заказы' && currentRole === roleEnum.menedger" class="wrapper">
 		<v-btn 
+			id="target4"
 			text="Оформить заказ" 
 			class="btn mb-4"
-			@click=""
 		/>
+		<add-order/>
 		<v-btn 
 			text="Список заказов" 
 			class="btn"
-			@click=""
 		/>
 	</div>
 	<div v-if="tabs === 'заказчики'" style="width: 800px; margin: 0 auto;" class="mt-5">
@@ -70,10 +70,11 @@ import AddClientForm from '@/components/widgets/AddClientForm.vue';
 import DeleteClientForm from '@/components/widgets/DeleteClientForm.vue';
 import EditClientForm from '@/components/widgets/EditClientForm.vue';
 import ClientList from '@/components/widgets/ClientList.vue';
+import AddOrder from '@/components/widgets/AddOrder.vue';
 
 export default {
 	components: {
-		AddClientForm, EditClientForm, DeleteClientForm, ClientList
+		AddClientForm, EditClientForm, DeleteClientForm, ClientList, AddOrder
 	},
   data: () => ({
     tabs: null,
