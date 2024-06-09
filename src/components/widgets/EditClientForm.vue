@@ -5,7 +5,7 @@
             title="Изменить существующего клиента"
           >
             <v-card-text>
-              <v-text-field v-model="clientCode" label="Код заказчика"></v-text-field>
+              <v-text-field v-model="clientCode" label="Код заказчика *"></v-text-field>
               <v-text-field v-model="clientSurname" label="Фамилия заказчика"></v-text-field>
               <v-text-field v-model="clientFirstname" label="Имя заказчика"></v-text-field>
               <v-text-field v-model="clientLastname" label="Отчество заказчика"></v-text-field>
