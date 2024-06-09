@@ -19,12 +19,13 @@ class Database():
 
     @staticmethod
     def add_client(data: dict):
+        print(data)
         db = Database()
         db.create_connect()
-        db.send_sql_request(f"INSERT INTO zhevzh_Klient(Fam_klienta, Name_klienta, Otch_klienta, Nomer_tel) VALUES({data['Fam_klienta']}, {data['Name_klienta']}, {data['Otch_klienta']}, {data['Nomer_tel']});")
+        db.send_sql_request(f"INSERT INTO zhevzh_Klient(Fam_klienta, Name_klienta, Otch_klienta, Nomer_tel) VALUES('{data['Fam_klienta']}', '{data['Name_klienta']}', '{data['Otch_klienta']}', '{data['Nomer_tel']}');")
         print(f"[COMMAND] INSERT INTO zhevzh_Klient(Fam_klienta, Name_klienta, Otch_klienta, Nomer_tel) VALUES({data['Fam_klienta']}, {data['Name_klienta']}, {data['Otch_klienta']}, {data['Nomer_tel']});")
         db.close()
-        return True
+        return 'ok'
 
     @staticmethod
     def edit_client(data: dict):
@@ -33,7 +34,7 @@ class Database():
         db.send_sql_request(f"UPDATE zhevzh_Klient SET Fam_klienta = '{data['Fam_klienta']}', Name_klienta = '{data['Name_klienta']}', Otch_klienta = '{data['Otch_klienta']}', Nomer_tel = '{data['Nomer_tel']}' WHERE Kod_klienta = {data['Kod_klienta']};")
         print(f"[COMMAND] UPDATE zhevzh_Klient SET Fam_klienta = '{data['Fam_klienta']}', Name_klienta = '{data['Name_klienta']}', Otch_klienta = '{data['Otch_klienta']}', Nomer_tel = '{data['Nomer_tel']}' WHERE Kod_klienta = {data['Kod_klienta']};")
         db.close()
-        return True
+        return 'ok'
 
     @staticmethod
     def delete_client(data: dict):
@@ -42,7 +43,7 @@ class Database():
         db.send_sql_request(f"DELETE FROM zhevzh_Klient WHERE Kod_klienta = {data['Kod_klienta']}")
         print(f"[COMMAND] DELETE FROM zhevzh_Klient WHERE Kod_klienta = {data['Kod_klienta']}")
         db.close()
-        return True
+        return 'ok'
 
     @staticmethod
     def get_client_list():
@@ -51,7 +52,7 @@ class Database():
         data = db.send_sql_request(f"SELECT * FROM ZHEVZH_KLIENT;")
         print(f"[COMMAND] SELECT * FROM ZHEVZH_KLIENT;")
         db.close()
-        return data
+        return 'ok'
 
     @staticmethod
     def get_employee_list():
@@ -60,7 +61,7 @@ class Database():
         data = db.send_sql_request("SELECT * FROM ZHEVZH_SOTR;")
         print(f"[COMMAND] SELECT * FROM ZHEVZH_SOTR;")
         db.close()
-        return data
+        return 'ok'
 
     @staticmethod
     def get_product_list():
@@ -69,7 +70,7 @@ class Database():
         data = db.send_sql_request("SELECT * FROM ZHEVZH_TOVAR")
         print(f"[COMMAND] SELECT * FROM ZHEVZH_TOVAR")
         db.close()
-        return data
+        return 'ok'
 
     @staticmethod
     def get_order_list():
@@ -79,7 +80,7 @@ class Database():
         data = db.send_sql_request("SELECT FROM ZHEVZH_TOVAR")
         print(f"[COMMAND] SELECT * FROM ZHEVZH_TOVAR")
         db.close()
-        return data
+        return 'ok'
 
     @staticmethod
     def add_order(data: dict):
@@ -89,7 +90,7 @@ class Database():
         db.send_sql_request(f"INSERT INTO zhevzh_Zakaz(Kod_klienta, Kod_sotr, Stoimost_zakaza, Data_zakaza, Data_vypolnenya) VALUES({data['Kod_klienta']}, {data['Kod_sotr']}, {data['Stoimost_zakaza']}, '{data['Data_zakaza']}', '{data['Data_vypolnenya']}');")
         print(f"[COMMAND] INSERT INTO zhevzh_Zakaz(Kod_klienta, Kod_sotr, Stoimost_zakaza, Data_zakaza, Data_vypolnenya) VALUES({data['Kod_klienta']}, {data['Kod_sotr']}, {data['Stoimost_zakaza']}, '{data['Data_zakaza']}', '{data['Data_vypolnenya']}');")
         db.close()
-        return True
+        return 'ok'
 
     @staticmethod
     def edit_order(data: dict):
@@ -99,7 +100,7 @@ class Database():
         db.send_sql_request(f"UPDATE zhevzh_Zakaz SET Fam_klienta = '{data['Fam_klienta']}', Name_klienta = '{data['Name_klienta']}', Otch_klienta = '{data['Otch_klienta']}', Nomer_tel = '{data['Nomer_tel']}' WHERE Kod_klienta = {data['Kod_klienta']};")
         print(f"[COMMAND] ")
         db.close()
-        return True
+        return 'ok'
 
     @staticmethod
     def delete_order(data: dict):
@@ -109,7 +110,7 @@ class Database():
         db.send_sql_request(f"DELETE FROM zhevzh_Zakaz WHERE Kod_zakaza = {data['Kod_zakaza']}")
         print(f"[COMMAND] DELETE FROM zhevzh_Zakaz WHERE Kod_zakaza = {data['Kod_zakaza']}")
         db.close()
-        return True
+        return 'ok'
 
 
 if __name__ == '__main__':
