@@ -7,6 +7,7 @@
   <Main
     v-if="userIsAuthorized"
     @logout="userIsAuthorized=false"
+    :currentRole="currentRole"
   />
 </template>
 
@@ -22,8 +23,8 @@ export default {
   },
   data() {
     return {
-      userIsAuthorized: false,
-      currentRole: 0
+      userIsAuthorized: true,
+      currentRole: 1
     }
   },
   methods: {
