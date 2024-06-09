@@ -68,9 +68,20 @@ class Database():
         db = Database()
         db.create_connect()
         data = db.send_sql_request("SELECT * FROM ZHEVZH_SOTR;")
+        result_data = []
+        for item in data:
+            result_data.append({
+                'Kod_sotr': item[0],
+                'Fam_sotr': item[1],
+                'Name_sotr': item[2],
+                'Otch_sotr': item[3],
+                'Pochta_sotr': item[4],
+                'Kod_dolg': item[5],
+                'Data_priema': item[6],
+            })
         print(f"[COMMAND] SELECT * FROM ZHEVZH_SOTR;")
         db.close()
-        return data
+        return result_data
 
     @staticmethod
     def get_product_list():
@@ -123,8 +134,8 @@ class Database():
 
 
 if __name__ == '__main__':
-    print(Database.get_client_list())
-    # print(Database.get_employee_list())
+    # print(Database.get_client_list())
+    print(Database.get_employee_list())
     # print(Database.get_product_list())
     # Database.add_client({
     #     'Fam_klienta': '1',
