@@ -52,7 +52,16 @@ class Database():
         data = db.send_sql_request(f"SELECT * FROM ZHEVZH_KLIENT;")
         print(f"[COMMAND] SELECT * FROM ZHEVZH_KLIENT;")
         db.close()
-        return 'ok'
+        result_data = []
+        for item in data:
+            result_data.append({
+                'Kod_klienta': item[0],
+                'Fam_klienta': item[1],
+                'Name_klienta': item[2],
+                'Otch_klienta': item[3],
+                'Nomer_tel': item[4]
+            })
+        return result_data
 
     @staticmethod
     def get_employee_list():
@@ -61,7 +70,7 @@ class Database():
         data = db.send_sql_request("SELECT * FROM ZHEVZH_SOTR;")
         print(f"[COMMAND] SELECT * FROM ZHEVZH_SOTR;")
         db.close()
-        return 'ok'
+        return data
 
     @staticmethod
     def get_product_list():
@@ -70,7 +79,7 @@ class Database():
         data = db.send_sql_request("SELECT * FROM ZHEVZH_TOVAR")
         print(f"[COMMAND] SELECT * FROM ZHEVZH_TOVAR")
         db.close()
-        return 'ok'
+        return data
 
     @staticmethod
     def get_order_list():
@@ -80,7 +89,7 @@ class Database():
         data = db.send_sql_request("SELECT FROM ZHEVZH_TOVAR")
         print(f"[COMMAND] SELECT * FROM ZHEVZH_TOVAR")
         db.close()
-        return 'ok'
+        return data
 
     @staticmethod
     def add_order(data: dict):
@@ -114,7 +123,7 @@ class Database():
 
 
 if __name__ == '__main__':
-    # print(Database.get_client_list())
+    print(Database.get_client_list())
     # print(Database.get_employee_list())
     # print(Database.get_product_list())
     # Database.add_client({
